@@ -265,7 +265,6 @@
 // Drag and drop / setCenter
 	(function () {
 		container.addEventListener ('mousedown', mouseDown);
-		window.addEventListener('resize', setToCenter);
 		document.documentElement.onselectstart = function (e) {return false};
 		document.documentElement.ondragstart = function(e) {return false};
 
@@ -273,14 +272,13 @@
 		var shiftX, shiftY;
 		var maxY, maxX;
 		var scrollHeight, scrollWidth;
-		getSize ();
-		setToCenter ();
 
-		function setToCenter () {
+		getSize ();
+
+		(function () {
 			container.style.top = (scrollHeight - container.offsetHeight)/2 + "px";
 			container.style.left = (scrollWidth - container.offsetWidth)/2 + "px";
-			getSize ();
-		};
+		})();
 
 		function mouseDown (e) {
 			shiftX = e.pageX - getCoords(container).left;
