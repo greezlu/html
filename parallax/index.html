@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Parallax</title>
+	<style>
+	* {
+		border: none;
+		padding: 0;
+		margin: 0;
+	}
+	body {
+		background: silver;
+		background-size: cover;
+		overflow: hidden;
+		min-width: 1280px;
+		min-height: 720px;
+	}
+		.box {
+			width: 100px;
+			height: 100px;
+			position: absolute;
+			top: 50%;
+			left: 50%;
+		}
+		.green {
+			/*margin: -50px 0 0 -50px;*/
+			/*top: 550px;
+			left: 550px;*/
+			background: #2ecc71;
+		}
+	</style>
+</head>
+<body>
+	<div class="green box"></div>
+	<script>
+document.addEventListener('mousemove', mouseMove);
+
+var green = document.getElementsByClassName('green')[0];
+
+var defX = green.getBoundingClientRect().left;
+var defY = green.getBoundingClientRect().top;
+
+var scrollHeight = Math.max(
+	document.body.scrollHeight, document.documentElement.scrollHeight,
+	document.body.offsetHeight, document.documentElement.offsetHeight,
+	document.body.clientHeight, document.documentElement.clientHeight
+);
+var scrollWidth = Math.max(
+	document.body.scrollWidth, document.documentElement.scrollWidth,
+	document.body.offsetWidth, document.documentElement.offsetWidth,
+	document.body.clientWidth, document.documentElement.clientWidth
+);
+
+var middleX = scrollWidth/2;
+var middleY = scrollHeight/2;
+
+var aN;
+
+		function mouseMove (e) {
+			var start = performance.now();
+			var limitX = middleX,
+					limitY = middleY;
+			var scalarX = 0.15,
+					scalarY = 0.15;
+			var mX = (e.pageX - middleX)/middleX,
+					mY = (e.pageY - middleY)/middleY;
+			var newPosX = defX + (mX*limitX*scalarX),
+					newPosY = defY + (mY*limitY*scalarY);
+
+			var friction = 250;
+
+			cancelAnimationFrame(aN);
+			aN = requestAnimationFrame(animate);
+
+			function animate (time) {
+				var timePass = Math.abs(time - start);
+				var timeFraction = timePass/friction;
+				if (timeFraction>1) { timeFraction = 1 };					
+				draw (timeFraction);
+				if (timeFraction<1) { requestAnimationFrame(animate) };
+
+				function draw (timeFraction) {
+					var coords = green.getBoundingClientRect();
+					green.style.left = coords.left + ( (newPosX-coords.left) * timeFraction) + "px";
+					green.style.top = coords.top + ( (newPosY-coords.top) * timeFraction) + "px";
+				};
+			};
+		};
+  </script>
+</body>
+</html>
