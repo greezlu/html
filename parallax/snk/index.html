@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Parallax</title>
+	<script type="text/javascript" src="Parallax.js"></script>
+	<script type="text/javascript" src="main.js" defer></script>
+	<style>
+		* {
+			border: none;
+			padding: 0;
+			margin: 0;
+		}
+		body {
+			width: 100%;
+			height: 100%;
+			background: fixed url(bg.jpg) no-repeat;
+			overflow: hidden;
+			background-size: cover;
+			width: 100%;
+			height: 100%;
+		}
+		.titan {
+			width: 1410px;
+			height: 1010px;
+			position: absolute;
+		}
+		.armin {
+			width: 393px;
+			height: 593px;
+			position: absolute;
+		}
+		.mikasa {
+			width: 738px;
+			height: 602px;
+			position: absolute;
+		}
+		.eren {
+			width: 735px;
+			height: 465px;
+			position: absolute;
+		}
+	</style>
+</head>
+<body>
+	<img class="titan" src="titan.png" alt="">
+	<img class="armin" src="armin.png" alt="">
+	<img class="eren" src="eren.png" alt="">
+	<img class="mikasa" src="mikasa.png" alt="">
+</body>
+</html>
