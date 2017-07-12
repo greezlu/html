@@ -1,0 +1,34 @@
+* {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+body {
+	width: 100%;
+	height: 100%;
+	background: fixed url(bg.jpg) no-repeat;
+	overflow: hidden;
+	background-size: cover;
+	width: 100%;
+	height: 100%;
+}
+.titan {
+	width: 1410px;
+	height: 1010px;
+	position: absolute;
+}
+.armin {
+	width: 393px;
+	height: 593px;
+	position: absolute;
+}
+.mikasa {
+	width: 738px;
+	height: 602px;
+	position: absolute;
+}
+.eren {
+	width: 735px;
+	height: 465px;
+	position: absolute;
+}
