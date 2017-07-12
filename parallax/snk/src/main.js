@@ -1,4 +1,4 @@
-'use strict';
+// 'use strict';
 
 var titan = new Parallax (
 	document.getElementsByClassName('titan')[0], {
@@ -37,19 +37,19 @@ function rescaleHeroes () {
 
 	if (!clientWidth || !clientHeight) { return };
 
-	var scale;
-	if (clientWidth>clientHeight) {
-		scale = clientHeight/1080;
-	} else {
-		scale = clientWidth/1920;
-	};
-
 	for (var prop in heroList) {
 		resize (heroList[prop]);
 		reposition (heroList[prop])
 	};
 
 	function resize (target) {
+		var scale;
+		if (clientWidth>clientHeight) {
+			scale = clientHeight/1080;
+		} else {
+			scale = clientWidth/1920;
+		};
+
 		var parallaxScene = target['scene'];
 		var scene = parallaxScene['scene'];
 
@@ -61,11 +61,14 @@ function rescaleHeroes () {
 	};
 
 	function reposition (target) {
+		var scaleX = clientWidth/1920;
+		var scaleY = clientHeight/1080;
+
 		var parallaxScene = target['scene'];
 		var scene = parallaxScene['scene'];
 
-		var currentX = target.x*scale;
-		var currentY = target.y*scale;
+		var currentX = target.x*scaleX;
+		var currentY = target.y*scaleY;
 
 		parallaxScene.defaultX = currentX;
 		scene.style.left = currentX + "px";
@@ -74,25 +77,21 @@ function rescaleHeroes () {
 		scene.style.top = currentY + "px";
 
 		if (currentX<0) {
-			parallaxScene.limitX = target.x*scale;
+			parallaxScene.limitX = target.x*scaleX;
 		};
 		if (currentY<0) {
-			parallaxScene.limitY = target.y*scale;
+			parallaxScene.limitY = target.y*scaleY;
 		};
 	};
 
 };
 var timer;
 function resizeFunction () {
-	
 	clearTimeout(timer);
 	timer = setTimeout(rescaleHeroes, 500);
-
 };
 
 document.addEventListener ('DOMContentLoaded', rescaleHeroes);
-
 window.addEventListener ('resize', resizeFunction);
-
 document.ondragstart = function () {return false};
 document.onselectstart = function () {return false};
