@@ -1,0 +1,103 @@
+* {
+	border: none;
+	padding: 0;
+	margin: 0;
+}
+
+body {
+	font-family: 'Roboto', sans-serif;
+	font-size: 15px;
+	line-height: 25px;
+	color: #262626;
+	cursor: default;
+}
+
+#mainCanvas {
+	display: block;
+}
+
+.brushRadius, .negativeSize, .positiveSize {
+	background: white;
+	box-shadow: 0 4px 6px rgba(50,50,93,.11),
+			0 1px 3px rgba(0,0,0,.08);
+}
+
+.brushRadius {
+	height: 27px;
+	width: 45px;
+	padding: 3px 0 0 0;
+	text-align: center;
+	position: fixed;
+	top: 10px;
+	left: 10px;
+	border-radius: 4px;
+}
+
+.radiusView {
+	font-weight: 700;
+}
+
+.negativeSize, .positiveSize {
+	position: fixed;
+	top: 10px;
+	width: 30px;
+	height: 27px;
+	padding: 3px 0 0 0;
+	text-align: center;
+	font-weight: 700;
+	border-radius: 4px;
+}
+
+.negativeSize {
+	height: 28px;
+	padding: 2px 0 0 0;
+	left: 65px;
+}
+
+.positiveSize {
+	left: 105px;
+}
+
+.negativeSize:hover {
+	background: #e74c3c;
+	cursor: pointer;
+	color: #f2f2f2;
+}
+
+.positiveSize:hover {
+	background: #2ecc71;
+	cursor: pointer;
+	color: #f2f2f2;
+}
+
+#colorPick {
+	position: fixed;
+	top: 10px;
+	right: 10px;
+}
+
+.colorTest:first-child {
+	margin: 0;
+}
+
+.colorTest.choose {
+	box-shadow: 0 0 12px rgba(50,50,93,0.33);
+}
+
+.colorTest, #colorSample {
+	display: none;
+	width: 30px;
+	height: 30px;
+	border-radius: 15px;
+	float: left;
+	margin: 0 0 0 10px;
+	cursor: pointer;
+	box-shadow: 0 4px 6px rgba(50,50,93,.11),
+			0 1px 3px rgba(0,0,0,.08);
+}
+
+#colorSample {
+	float: right;
+	margin: 0 0 0 10px;
+	display: block;
+}
