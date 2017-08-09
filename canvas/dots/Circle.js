@@ -81,6 +81,8 @@ Circle.prototype.mouseY = null;
 			circle.context.arc(circle.x, circle.y, circle.currentRadius, 0, Math.PI*2);
 			circle.context.fillStyle = circle.color;
 			circle.context.fill();
+			circle.context.strokeStyle = 'black';
+			circle.context.stroke();
 
 		};
 
