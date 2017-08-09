@@ -18,8 +18,8 @@ var qnt = 800;
 	};
 
 	function resizeCanvas () {
-		currentHeight = document.documentElement.clientHeight;
-		currentWidth = document.documentElement.clientWidth;
+		currentHeight = window.innerHeight;
+		currentWidth = window.innerWidth;
 
 		canvas.setAttribute('height', currentHeight);
 		canvas.setAttribute('width', currentWidth);
