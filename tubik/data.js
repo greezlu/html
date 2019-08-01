@@ -132,3 +132,40 @@ var data = {
 		}
 	}
 };
+
+var xhr = new XMLHttpRequest();
+
+// 2. Конфигурируем его: GET-запрос на URL 'phones.json'
+xhr.open('GET', 'https://geocode-maps.yandex.ru/1.x?geocode=moscow&apikey=261b2f2a-4da8-44ad-aed0-c2793300a241', false);
+
+// xhr.setRequestHeader(
+//   "Content-Type",
+//   "multipart/form-data"
+// );
+
+// xhr.setRequestHeader(
+//   "Access-Control-Allow-Origin",
+//   "Yandex Maps Key"
+// );
+
+// xhr.setRequestHeader(
+//   "Access-Control-Allow-Headers",
+//   "Yandex Maps Key"
+// );
+
+// xhr.setRequestHeader(
+//   "Origin",
+//   "http://localhost:8080"
+// );
+
+// 3. Отсылаем запрос
+xhr.send();
+
+// 4. Если код ответа сервера не 200, то это ошибка
+if (xhr.status != 200) {
+  // обработать ошибку
+  alert( xhr.status + ': ' + xhr.statusText ); // пример вывода: 404: Not Found
+} else {
+  // вывести результат
+  console.log( xhr.responseText ); // responseText -- текст ответа.
+};
