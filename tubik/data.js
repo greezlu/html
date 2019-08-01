@@ -143,20 +143,20 @@ xhr.open('GET', 'https://geocode-maps.yandex.ru/1.x?geocode=moscow&apikey=261b2f
 //   "multipart/form-data"
 // );
 
-xhr.setRequestHeader(
-  "Access-Control-Allow-Origin",
-  "Yandex Maps Key"
-);
+// xhr.setRequestHeader(
+//   "Access-Control-Allow-Origin",
+//   "Yandex Maps Key"
+// );
 
 // xhr.setRequestHeader(
 //   "Access-Control-Allow-Headers",
 //   "Yandex Maps Key"
 // );
 
-// xhr.setRequestHeader(
-//   "Origin",
-//   "http://localhost:8080"
-// );
+xhr.setRequestHeader(
+  "Origin",
+  "https://greezlu.github.io"
+);
 
 // 3. Отсылаем запрос
 xhr.send();
