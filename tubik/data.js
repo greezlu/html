@@ -143,10 +143,10 @@ xhr.open('GET', 'https://geocode-maps.yandex.ru/1.x?geocode=moscow&apikey=261b2f
 //   "multipart/form-data"
 // );
 
-// xhr.setRequestHeader(
-//   "Access-Control-Allow-Origin",
-//   "Yandex Maps Key"
-// );
+xhr.setRequestHeader(
+  "Access-Control-Allow-Origin",
+  "Yandex Maps Key"
+);
 
 // xhr.setRequestHeader(
 //   "Access-Control-Allow-Headers",
