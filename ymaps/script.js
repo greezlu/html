@@ -52,8 +52,6 @@ function setComponents ( currentAdress ) {
 
   search.value = currentAdress['GeoObject']['name'];
 
-  console.log(search.value = currentAdress['GeoObject']['name']);
-
   var components = currentAdress['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components'];
 
   // Не уверен почему координаты в обратном порядке
@@ -65,8 +63,6 @@ function setComponents ( currentAdress ) {
 };
 
 function replaceResults (components, pos) {
-
-  console.log(components, pos);
 
   var resultContainer = document.getElementById('resultContainer');
   var newContainer = document.createElement('div');
@@ -101,8 +97,6 @@ function getExtraKinds (components, pos) {
 
   function loadExtraKind (kindValue) {
 
-    console.log(kindValue);
-
     if (!kindValue) {
       replaceResults(components, pos);
     };
@@ -112,25 +106,17 @@ function getExtraKinds (components, pos) {
       kind: kindValue
     };
 
-    console.log("Making ymaps request",options);
-
     ymapsSend(pos, options, addComponents);
 
   };
 
   function addComponents (geoData) {
 
-    console.log("Answer", geoData);
-
     geoData.forEach(getGeoPoint);
 
-    console.log("Can i see it");
-
     if (--extraKindsCounter) {
-      console.log(extraKindsCounter, !!extraKindsCounter);
       loadExtraKind ( extraKindArr[extraKindsCounter-1] );
     } else {
-      console.log(extraKindsCounter, !!extraKindsCounter);
       replaceResults(components, pos);
     };
 
@@ -140,23 +126,14 @@ function getExtraKinds (components, pos) {
 
     var name = geoPoint['GeoObject']['name'];
 
-    console.log(geoPoint, name);
-
     for (var i = components.length; i--;) {
-
-      console.log(components[i]['kind'], extraKindArr[extraKindsCounter-1]);
       if ( components[i]['kind'] == extraKindArr[extraKindsCounter-1] ){
-
-        console.log(components[i]['kind'], "extra");
-        components[i]['extra'] = true }; // remove extra
-
+        components[i]['extra'] = true };
       if ( components[i]['kind'] == extraKindArr[extraKindsCounter-1] && components[i]['name'] == name ) {
         name = false
       };
 
     };
-
-    console.log(components, name, !!name);
 
     if (name) {
       components.push({kind: extraKindArr[extraKindsCounter-1], name: name, extra: true})
