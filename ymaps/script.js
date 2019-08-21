@@ -169,8 +169,8 @@ multiRoute = new ymaps.multiRouter.MultiRoute({
 
     multiRoute.model.events.add("requestsuccess", function (event) {
         var route = event.get("target")
-            .getRoutes(0);
-        console.log("Длина маршрута " + route.properties.get("distance").text);
+            .getRoutes();
+        console.log("Длина маршрута " + route[0].properties.get("distance").text);
     })
 
     // ymapsMap.geoObjects.add(placemark)
