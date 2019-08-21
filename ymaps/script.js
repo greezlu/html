@@ -168,10 +168,14 @@ multiRoute = new ymaps.multiRouter.MultiRoute({
     ymapsMap.geoObjects.add(multiRoute);
 
     multiRoute.model.events.add("requestsuccess", function (event) {
-        var route = event.get("target")
-            .getRoutes();
+        var route = event.get("target").getRoutes();
+        //-------------------------------------------------
+        var a = document.createElement('div')
+        a.textContent = "Длина маршрута " + route[0].properties.get("distance").text;
+        var resultContainer = document.getElementById('resultContainer').append(a);
+        //-------------------------------------------------
         console.log("Длина маршрута " + route[0].properties.get("distance").text);
-    })
+    });
 
     // ymapsMap.geoObjects.add(placemark)
 
