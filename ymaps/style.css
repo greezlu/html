@@ -66,7 +66,7 @@ body {
   margin: 7px 0 0 0;
 }
 
-.container {
+.mainContainer {
   padding: 25px 0;
   width: 900px;
   position: relative;
@@ -90,7 +90,7 @@ body {
 
 
 .adressBox {
-  margin: 0 0 25px 0;
+  margin: 25px 0 25px 0;
 }
 
 .resultBox {
@@ -106,7 +106,7 @@ body {
   border: 1px solid #d1d5da;
   border-radius: 2px;
   padding: 16px 16px;
-  float: left;
+  display: inline-block;
   margin: 0 25px 25px 0;
 }
 
@@ -126,7 +126,6 @@ body {
   border-right: 1px solid #d1d5da;
   border-radius: 2px;
   cursor: pointer;
-
   background: white;
   width: 884px;
 }
@@ -160,4 +159,10 @@ body {
 
 .adressInputBox {
   position: relative;
+}
+
+.ymapsMap{
+  width: 900px;
+  height: 300px;
+  background: green;
 }
