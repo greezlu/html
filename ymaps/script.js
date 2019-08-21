@@ -1,66 +1,181 @@
-// Добавить возможность выбирать чекбосы для типа поиска
+
+var ymapsMap = document.getElementsByClassName('ymapsMap')[0];
+var multiRoute;
+
+// ymaps.ready(init);
+
+function mapInitiate () {
+  console.log(arguments);
+
+  ymapsMap = new ymaps.Map(ymapsMap, {
+                  center: [55.76, 37.64],
+                  zoom: 10,
+                  controls: ['zoomControl']
+              });
+
+  factoryList.forEach(addFactoriesPlacemark);
+
+}
+
+function addFactoriesPlacemark(item) {
+
+  var placemark = new ymaps.Placemark(item['coords'], {
+    balloonContent: item['adressList'][0],
+    iconCaption: item['name']
+  }, {
+    preset: "islands#blueFactoryCircleIcon",
+    // Отключаем кнопку закрытия балуна.
+    balloonCloseButton: false
+});
+
+ymapsMap.geoObjects.add(placemark);
+
+};
+
+
+//----------------------------------------------------// Map Script ^
+
 // Визуальное подтверждение загрузки скрипта
 
 // Иконки выпадающего списка
 
 // Задержка при загрузке страницы
 var search = document.getElementsByClassName('adressInput')[0];
-var currentAdressList;
-var extraKindArr = ['district'];
+
+var adressList;
+
+var currentAdress;
 
 function inputSearchChange (e) {
-  console.log("Change in the Search input");
-  ymapsSend(search.value, {json: true}, ajaxSuccess);
+  ymapsSend(search.value, {json: true}, geocodeSuccess);
 };
 
-function ymapsSend(coordinates, options, callBackSuccess, callbackError) {
+function ymapsSend(coordinates, options, callbackSuccess, callbackError) {
 
   var myGeocoder = ymaps.geocode(coordinates, options)
   .then(function (res) {
-    console.log("Successful ajax request");
-    callBackSuccess(res.GeoObjectCollection.featureMember);
+    callbackSuccess(res);
   }, function (err) {
-    console.log("Error ajax request");
-    showSamples(false);
+    showSamples(false); // doublecheck - looks sily
   });
 
 };
 
-function ajaxSuccess (geoData) {
-
-  console.log("Trying to change current samples");
-  var sampleList = showSamples(geoData);
+function geocodeSuccess (geoData) {
+  var geoDataCollection = geoData.GeoObjectCollection.featureMember;
+  showSamples(geoDataCollection);
+  // this^ function should work in different way (100 results + searc)
 
   document.addEventListener('click', sampleListClick); // Rename
+};
 
-  function sampleListClick (e) {
-    // Function is inside because of access to [geoData]
-    console.log("Click");
+function sampleListClick (e) {
 
-    if ( e.target.classList.contains('sampleItem') ) {
-      var position = e.target.getAttribute('position');
-      setComponents ( geoData[position] );
+  if ( e.target.classList.contains('sampleItem') ) {
+    var x = e.target.getAttribute('x');
+    var y = e.target.getAttribute('y');
+    search.value = e.target.textContent;
+    setExamples (x, y); // Rename - it does another work
+  };
+
+  document.removeEventListener('click', sampleListClick);
+  showSamples(false);
+
+};
+
+
+function setExamples ( x, y ) {
+  //       should be ( coords, {options} )
+
+  // var adress = getReverseGeocode(coords);
+  getNearFactory(x, y);
+
+  // var components = currentAdress['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components'];
+
+  // Не уверен почему координаты в обратном порядке
+  // var pos = currentAdress['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'];
+  // pos = pos[1]+" "+pos[0];
+
+  // getExtraKinds(components, pos);
+
+  function loadExtraKind (kindValue) {
+
+    if (!kindValue) {
+      replaceResults(components, pos);
     };
 
-    document.removeEventListener('click', sampleListClick);
-    showSamples(false);
+    var options = {
+      json: true,
+      kind: kindValue
+    };
+
+    ymapsSend(pos, options, addComponents);
+
   };
 
 };
 
-function setComponents ( currentAdress ) {
+function getNearFactory (x,y) {
+  // (adressCoords)
 
-  search.value = currentAdress['GeoObject']['name'];
 
-  var components = currentAdress['GeoObject']['metaDataProperty']['GeocoderMetaData']['Address']['Components'];
+  // console.log(coords, factoryList[0]['coords']);
+  //
+  // console.log(ymaps.coordSystem.geo.getDistance(coords, +" "+ );
 
-  // Не уверен почему координаты в обратном порядке
-  var pos = currentAdress['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'];
-  pos = pos[1]+" "+pos[0];
+var min = Infinity;
+var factoryClose;
 
-  getExtraKinds(components, pos);
+  for (var i = factoryList.length; i--;) {
+    var factoryCoords = factoryList[i]['coords'];
+    var currentDistance = ymaps.coordSystem.geo.getDistance([y,x],factoryCoords);
 
-};
+    if (currentDistance<min){
+      min = currentDistance;
+      factoryClose = factoryList[i];
+    }
+
+  };
+
+
+
+//   var placemark = new ymaps.Placemark([y,x], {
+//     // balloonContent: factoryClose['adressList'][0],
+//     // iconCaption: factoryClose['name']
+//   }, {
+//     preset: "islands#greenHomeIcon",
+//     // Отключаем кнопку закрытия балуна.
+//     balloonCloseButton: false
+// });
+
+
+multiRoute = new ymaps.multiRouter.MultiRoute({
+        // Описание опорных точек мультимаршрута.
+        referencePoints: [
+            factoryClose['coords'],
+            [y,x]
+        ],
+        // Параметры маршрутизации.
+        params: {
+            // Ограничение на максимальное количество маршрутов, возвращаемое маршрутизатором.
+            results: 1
+        }
+    }, {
+        // Автоматически устанавливать границы карты так, чтобы маршрут был виден целиком.
+        boundsAutoApply: true
+    });
+
+    ymapsMap.geoObjects.add(multiRoute);
+
+    multiRoute.model.events.add("requestsuccess", function (event) {
+        var route = event.get("target")
+            .getRoutes(0);
+        console.log("Длина маршрута " + route.properties.get("distance").text);
+    })
+
+    // ymapsMap.geoObjects.add(placemark)
+
+}
 
 function replaceResults (components, pos) {
 
@@ -162,15 +277,19 @@ function createKindItem (kind, name) {
 };
 
 function showSamples (geoData) {
+  console.log(geoData);
   var sampleList = document.createElement('div');
   sampleList.id = "sampleList";
 
   for (var a = geoData.length; a--;) {
     var sampleItem = document.createElement('div');
     sampleItem.classList.add('sampleItem');
-    sampleItem.setAttribute('position', a);
-    sampleItem.append( document.createTextNode( geoData[a]['GeoObject']['name'] ));
-    sampleList.append(sampleItem);
+    // sampleItem.setAttribute('coords', geoData[a]['GeoObject']['Point']['pos']);
+
+    sampleItem.setAttribute('x', geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'][0]);
+    sampleItem.setAttribute('y', geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'][1]);
+    sampleItem.prepend( document.createTextNode( geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['text'] ));
+    sampleList.prepend(sampleItem);
   };
 
   return document.getElementById("sampleList").replaceWith(sampleList);
@@ -193,7 +312,7 @@ function inputKeyChange (e) {
 
   yandexKeyInput.removeEventListener('change', inputKeyChange);
   script = document.createElement('script');
-  script.src = "https://api-maps.yandex.ru/2.1?apikey="+yandexKeyInput.value+"&lang=ru_RU";
+  script.src = "https://api-maps.yandex.ru/2.1?apikey="+yandexKeyInput.value+"&lang=ru_RU&onload=mapInitiate";
   script.addEventListener ('error', scriptError);
   script.addEventListener ('load', scriptLoad);
 
