@@ -1,4 +1,3 @@
-
 var ymapsMap = document.getElementsByClassName('ymapsMap')[0];
 var multiRoute;
 
@@ -288,10 +287,10 @@ function showSamples (geoData) {
   for (var a = geoData.length; a--;) {
     var sampleItem = document.createElement('div');
     sampleItem.classList.add('sampleItem');
-    // sampleItem.setAttribute('coords', geoData[a]['GeoObject']['Point']['pos']);
 
-    sampleItem.setAttribute('x', geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'][0]);
-    sampleItem.setAttribute('y', geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['InternalToponymInfo']['Point']['coordinates'][1]);
+    // sampleItem.setAttribute('coords', geoData[a]['GeoObject']['Point']['pos']);
+    sampleItem.setAttribute('x', geoData[a]['GeoObject']['Point']['pos'].split(' ')[0]);
+    sampleItem.setAttribute('y', geoData[a]['GeoObject']['Point']['pos'].split(' ')[1]);
     sampleItem.prepend( document.createTextNode( geoData[a]['GeoObject']['metaDataProperty']['GeocoderMetaData']['text'] ));
     sampleList.prepend(sampleItem);
   };
